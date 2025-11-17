@@ -1,0 +1,89 @@
+<div class="min-h-screen bg-sky-50 flex justify-center py-12 px-4">
+  <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl p-10">
+
+    <!-- Title -->
+    <h1 class="text-3xl font-semibold text-slate-900 text-center mb-6">
+      Your Personalized Learning Path
+    </h1>
+
+    <!-- Goal / Estimated row -->
+    <div class="flex flex-wrap justify-center sm:justify-between items-center gap-4 mb-10">
+
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-600 font-medium">Goal:</span>
+        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm font-semibold">
+          {{ goal }}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-600 font-medium">Estimated Duration:</span>
+        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm font-semibold">
+          {{ estimated }}
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Steps -->
+    <div class="space-y-6">
+
+      <ng-container *ngFor="let step of steps">
+        <div class="rounded-2xl border border-slate-200 p-6 bg-white shadow-sm">
+
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-slate-500 font-medium text-sm mb-1">Step {{ step.id }}</p>
+
+              <h3 class="text-xl font-semibold text-slate-900 leading-tight">
+                {{ step.title }}
+              </h3>
+            </div>
+
+            <span *ngIf="step.duration"
+              class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-sm font-medium border border-sky-100">
+              {{ step.duration }}
+            </span>
+          </div>
+
+          <ul class="mt-4 list-disc list-inside text-slate-700 space-y-1">
+            <li *ngFor="let b of step.bullets">{{ b }}</li>
+          </ul>
+
+        </div>
+      </ng-container>
+
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-10 flex flex-wrap justify-between items-center gap-4">
+
+      <div class="flex gap-3">
+
+        <!-- Primary -->
+        <button (click)="onDownloadPDF()"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow-md">
+          Download PDF
+        </button>
+
+        <!-- Secondary (light blue) -->
+        <button (click)="onSaveToProfile()" class="px-5 py-2.5 rounded-xl bg-sky-100 hover:bg-sky-200 
+           text-sky-800 font-medium border border-sky-200">
+          Save to Profile
+        </button>
+
+        <!-- Tertiary (light grey-blue) -->
+        <button (click)="onRegenerate()" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 
+           text-slate-700 font-medium border border-slate-200">
+          Regenerate
+        </button>
+
+        
+
+      </div>
+      <p class="text-xs text-slate-400">
+          Tip: Click Download to print/save this path.
+        </p>
+
+    </div>
+  </div>
