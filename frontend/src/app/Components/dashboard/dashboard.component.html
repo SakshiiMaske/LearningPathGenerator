@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col items-center text-center px-4 py-24 bg-gray-50">
+<div class="w-full flex flex-col items-center text-center px-4 py-28 bg-gray-50">
 
   <!-- Heading -->
   <h1 class="text-4xl font-bold text-gray-900 tracking-tight">
@@ -15,6 +15,7 @@
     <div
       class="flex items-center bg-white border border-gray-300 rounded-xl px-4 py-3 shadow-sm
              transition focus-within:ring-2 focus-within:ring-sky-200">
+
       <span class="material-icons text-gray-500 mr-3">search</span>
 
       <input
@@ -51,9 +52,14 @@
 
   <!-- Button -->
   <button
-    (click)="onGeneratePath()"
+    (click)="goToLearningPath()"
     class="mt-8 px-7 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow-md transition">
     Generate Learning Path
   </button>
+  <!-- AI LOADING OVERLAY -->
+<div *ngIf="loading" class="loader-container">
+  <div class="ai-loader"></div>
+  <p class="loader-text">Generating your learning path...</p>
+</div>
 
 </div>

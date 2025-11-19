@@ -6,3 +6,68 @@
   background-color: #c7c7c7;
   border-radius: 10px;
 }
+
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* AI glowing orb animation */
+.ai-loader {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0ea5e9 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 
+    0 0 20px rgba(14, 165, 233, 0.6),
+    0 0 40px rgba(14, 165, 233, 0.4),
+    0 0 60px rgba(14, 165, 233, 0.2);
+  animation: pulseAI 1.3s infinite ease-in-out;
+}
+
+@keyframes pulseAI {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 
+      0 0 20px rgba(14, 165, 233, 0.4),
+      0 0 40px rgba(14, 165, 233, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 
+      0 0 30px rgba(14, 165, 233, 0.7),
+      0 0 60px rgba(14, 165, 233, 0.5);
+  }
+  100% {
+    transform: scale(0.9);
+    box-shadow: 
+      0 0 20px rgba(14, 165, 233, 0.4),
+      0 0 40px rgba(14, 165, 233, 0.3);
+  }
+}
+
+.loader-text {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #0369a1;
+  font-weight: 500;
+  animation: fadeText 1.5s infinite ease-in-out;
+}
+
+@keyframes fadeText {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+

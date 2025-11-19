@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Step {
-  id: number;
-  title: string;
-  bullets: string[];
-  duration?: string;
-}
+import { ActivatedRoute } from '@angular/router';
+import { AiService } from 'src/app/Services/ai.service';
 
 @Component({
   selector: 'app-learning-path',
@@ -13,67 +8,63 @@ interface Step {
   styleUrls: ['./learning-path.component.css']
 })
 export class LearningPathComponent implements OnInit {
-  goal = 'Java Developer';
-  estimated = '8–12 Weeks';
 
-  steps: Step[] = [
-    {
-      id: 1,
-      title: 'Core Java Basics',
-      bullets: ['Variables, Loops, Datatypes', 'OOP Concepts'],
-      duration: '7–10 days'
-    },
-    {
-      id: 2,
-      title: 'Collections + OOP Advanced',
-      bullets: ['List, Set, Map', 'Exception Handling'],
-      duration: '10–12 days'
-    },
-    {
-      id: 3,
-      title: 'SQL Fundamentals',
-      bullets: ['Joins, Queries', 'Normalization'],
-      duration: '7 days'
-    },
-    {
-      id: 4,
-      title: 'Git + GitHub',
-      bullets: ['Branching, Pull Requests'],
-      duration: '3 days'
-    },
-    {
-      id: 5,
-      title: 'Spring Boot Basics',
-      bullets: ['REST API', 'Dependency Injection'],
-      duration: '14 days'
-    },
-    {
-      id: 6,
-      title: 'Mini Project',
-      bullets: ['Build a CRUD API using Java + Spring Boot']
-    }
-  ];
+  career: string = '';
+  loading = false;
+  error = '';
+  learningPath: any = null;
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private aiService: AiService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Read `career` from query params when navigating from Dashboard
+    this.route.queryParams.subscribe(params => {
+      this.career = params['career'];
 
-  // Simple "Download PDF" fallback: opens print dialog for the printable card.
-  // Replace with jsPDF/html2canvas if you want a file instead.
-  onDownloadPDF() {
-    // Add a small CSS class to make the card print-friendly if desired.
-    window.print();
+      if (this.career) {
+        this.loadLearningPath();
+      }
+    });
   }
 
-  // Simulated save: you would call your backend API to persist.
-  onSaveToProfile() {
-    // Placeholder: call your API here
-    alert('Learning Path saved to your profile (placeholder).');
+  /** CALL AI BACKEND AUTOMATICALLY */
+  loadLearningPath() {
+    this.loading = true;
+    this.error = '';
+    this.learningPath = null;
+
+    this.aiService.generateLearningPath(this.career).subscribe({
+      next: (response) => {
+        try {
+          // Backend returns plain text JSON — parse it
+          this.learningPath = JSON.parse(response);
+        } catch (e) {
+          this.error = 'Invalid JSON response received from AI.';
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Error connecting to server.';
+        this.loading = false;
+      }
+    });
   }
 
-  // Regenerate (mock): shuffle durations or reset — adapt to your generator.
+  /** RE-GENERATE LEARNING PATH AGAIN */
   onRegenerate() {
-    // Example: rotate steps array (simple visual regenerate)
-    this.steps = [...this.steps.slice(1), this.steps[0]];
+    this.loadLearningPath();   // Call backend again
+  }
+
+  /** DOWNLOAD PDF */
+  onDownloadPDF() {
+    window.print(); // simple print to PDF
+  }
+
+  /** SAVE OR BOOKMARK (FUTURE FEATURE) */
+  onSaveToProfile() {
+    alert('Learning Path saved to your profile! (placeholder)');
   }
 }

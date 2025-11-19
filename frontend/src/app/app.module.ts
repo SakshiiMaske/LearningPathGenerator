@@ -8,6 +8,7 @@ import { HeaderComponent } from './HeaderFooter/header/header.component';
 import { FooterComponent } from './HeaderFooter/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { LearningPathComponent } from './Components/learning-path/learning-path.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { LearningPathComponent } from './Components/learning-path/learning-path.
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -7,43 +7,50 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+
   searchQuery = '';
   showDropdown = false;
-  constructor(private router: Router) {}
-
-  careers = [
-    'Java Developer',
-    'Data Analyst',
-    'DevOps Engineer',
-    'AI Engineer',
-    'Cloud Architect',
-    'Frontend Developer',
-    'Backend Developer',
-    'Full Stack Developer'
-  ];
-
+  careers = ['Java Developer', 'Frontend Developer', 'Data Analyst', 'Python Developer'];
   filteredCareers = [...this.careers];
+  selectedCareer = '';
+  loading = false;   // <-- NEW
+
+  constructor(private router: Router) {}
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
 
   filterSuggestions() {
-  const query = this.searchQuery.toLowerCase();
-  this.filteredCareers = this.careers.filter(c =>
-    c.toLowerCase().includes(query)
-  );
-
-  this.showDropdown = true;
-}
+    this.filteredCareers = this.careers.filter(c =>
+      c.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
 
   selectCareer(career: string) {
+    this.selectedCareer = career;
     this.searchQuery = career;
     this.showDropdown = false;
   }
 
-  onGeneratePath() {
-    this.router.navigate(['/learning-path']);
-  }
+  goToLearningPath() {
+    if (!this.selectedCareer && !this.searchQuery.trim()) {
+      alert("Please enter or select a career.");
+      return;
+    }
 
+    const careerToSend = this.selectedCareer || this.searchQuery;
+
+    // 👉 Start loading animation
+    this.loading = true;
+
+    // 👉 Add a small delay to SHOW the animation before navigating
+    setTimeout(() => {
+      this.loading = false;
+
+      this.router.navigate(['/learning-path'], {
+        queryParams: { career: careerToSend }
+      });
+    }, 1600);  // PERFECT smooth duration
+  }
 }
