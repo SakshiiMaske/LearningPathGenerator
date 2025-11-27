@@ -1,0 +1,37 @@
+<div class="w-11/12 mx-auto py-32">
+
+  <h2 class="text-2xl font-semibold mb-6">Your Saved Learning Paths</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center text-lg py-6 animate-pulse">
+    Loading...
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && savedPaths.length === 0"
+       class="text-center text-gray-500 text-lg py-6">
+    You have no saved learning paths yet.
+  </div>
+
+  <!-- Saved Paths Grid -->
+  <div *ngIf="savedPaths.length > 0"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div *ngFor="let path of savedPaths"
+         class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+
+      <h3 class="text-xl font-bold mb-3">{{ path.pathName }}</h3>
+
+      <p class="text-sm text-gray-500 mb-4">
+        Saved on: {{ path.savedAt | date:'medium' }}
+      </p>
+
+      <button
+        (click)="openProgress(path.id)"
+        class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg transition">
+        View Progress
+      </button>
+    </div>
+
+  </div>
+</div>

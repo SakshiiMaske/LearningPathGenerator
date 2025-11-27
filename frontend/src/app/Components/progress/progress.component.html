@@ -1,0 +1,65 @@
+<div class="flex-1 bg-sky-50 px-4 py-32 flex justify-center">
+
+  <div class="w-full max-w-3xl bg-white p-10 rounded-3xl shadow-xl">
+
+    <h2 class="text-3xl font-semibold text-slate-900 text-center mb-6">
+      {{ learningPath?.goal }}
+    </h2>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-slate-200 rounded-full h-3 mb-8">
+      <div class="bg-sky-600 h-3 rounded-full transition-all duration-300"
+           [style.width.%]="progressPercent"></div>
+    </div>
+
+    <p class="text-center text-slate-600 mb-10 font-medium">
+      {{ progressPercent }}% Completed
+    </p>
+
+    <!-- Steps -->
+    <div *ngIf="learningPath?.steps" class="space-y-6">
+
+      <ng-container *ngFor="let step of learningPath.steps">
+        <div class="rounded-2xl border border-slate-200 p-6 bg-white shadow-sm">
+
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <p class="text-slate-500 font-medium text-sm mb-1">
+                Step {{ step.id }}
+              </p>
+
+              <h3 class="text-xl font-semibold text-slate-900">
+                {{ step.title }}
+              </h3>
+            </div>
+
+            <span *ngIf="step.duration"
+                  class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-sm font-medium border border-sky-100">
+              {{ step.duration }}
+            </span>
+          </div>
+
+          <!-- Topics as checkboxes -->
+          <ul class="space-y-3 mt-2">
+            <li *ngFor="let topic of step.bullets; let i = index" class="flex items-center gap-3">
+
+              <input 
+                type="checkbox"
+                class="w-5 h-5 rounded border-slate-400 text-sky-600 focus:ring-sky-500"
+                [checked]="progressState[step.id + '-' + i]"
+                (change)="toggleProgress(step.id + '-' + i)"
+              />
+
+              <span class="text-slate-700">{{ topic }}</span>
+
+            </li>
+          </ul>
+
+        </div>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</div>

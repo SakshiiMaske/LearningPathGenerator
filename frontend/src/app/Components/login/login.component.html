@@ -1,0 +1,42 @@
+<div class="flex-1 flex items-center justify-center bg-sky-50 py-20">
+
+  <div class="w-full max-w-sm bg-white shadow-lg rounded-2xl p-8">
+
+    <h2 class="text-2xl font-semibold text-slate-800 text-center mb-6">
+      Login
+    </h2>
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      class="w-full mb-3 px-4 py-2.5 border border-slate-300 rounded-xl 
+             focus:border-sky-500 focus:ring focus:ring-sky-200 outline-none"
+    />
+
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-xl
+             focus:border-sky-500 focus:ring focus:ring-sky-200 outline-none"
+    />
+
+    <button
+      (click)="login()"
+      class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl 
+             font-medium transition shadow-sm"
+    >
+      Login
+    </button>
+
+    <a
+      routerLink="/register"
+      class="block text-center text-sky-700 mt-4 hover:underline"
+    >
+      Don't have an account? Register
+    </a>
+
+  </div>
+
+</div>

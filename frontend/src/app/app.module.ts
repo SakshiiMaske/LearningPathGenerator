@@ -9,7 +9,12 @@ import { FooterComponent } from './HeaderFooter/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { LearningPathComponent } from './Components/learning-path/learning-path.component';
 import { HttpClientModule } from '@angular/common/http';
-
+import { LoginComponent } from './Components/login/login.component';
+import { RegisterComponent } from './Components/register/register.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { SavedPathsComponent } from './Components/saved-paths/saved-paths.component';
+import { ProgressComponent } from './Components/progress/progress.component';
 
 @NgModule({
   declarations: [
@@ -17,15 +22,20 @@ import { HttpClientModule } from '@angular/common/http';
     DashboardComponent,
     HeaderComponent,
     FooterComponent,
-    LearningPathComponent
+    LearningPathComponent,
+    LoginComponent,
+    RegisterComponent,
+    SavedPathsComponent,
+    ProgressComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

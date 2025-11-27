@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AiService } from 'src/app/Services/ai.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AiService } from 'src/app/services/ai.service';
+import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
   selector: 'app-learning-path',
@@ -13,10 +14,13 @@ export class LearningPathComponent implements OnInit {
   loading = false;
   error = '';
   learningPath: any = null;
+  
 
   constructor(
     private route: ActivatedRoute,
-    private aiService: AiService
+    private aiService: AiService,
+    private profileService: ProfileService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +69,26 @@ export class LearningPathComponent implements OnInit {
 
   /** SAVE OR BOOKMARK (FUTURE FEATURE) */
   onSaveToProfile() {
-    alert('Learning Path saved to your profile! (placeholder)');
+
+    if (!this.learningPath) {
+      console.error("No learning path found!");
+      return;
+    }
+
+    const payload = {
+      pathName: this.learningPath.goal || 'Learning Path',
+      learningPath: this.learningPath
+    };
+
+    this.profileService.savePath(payload).subscribe({
+      next: () => {
+        alert("Learning Path saved successfully!");
+        this.router.navigate(['/saved-paths']);
+      },
+      error: (err) => {
+        console.error("Error saving path:", err);
+        alert("Failed to save learning path.");
+      }
+    });
   }
 }
