@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,12 +11,21 @@ export class DashboardComponent {
 
   searchQuery = '';
   showDropdown = false;
+
   careers = ['Java Developer', 'Frontend Developer', 'Data Analyst', 'Python Developer'];
   filteredCareers = [...this.careers];
-  selectedCareer = '';
-  loading = false;   // <-- NEW
 
-  constructor(private router: Router) {}
+  selectedCareer = '';
+  loading = false;
+
+  // Popup flag
+  showAuthPopup = false;
+  showCareerPopup = false;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
@@ -34,23 +44,32 @@ export class DashboardComponent {
   }
 
   goToLearningPath() {
-    if (!this.selectedCareer && !this.searchQuery.trim()) {
-      alert("Please enter or select a career.");
-      return;
-    }
 
-    const careerToSend = this.selectedCareer || this.searchQuery;
+  if (!this.authService.isLoggedIn()) {
+    this.showAuthPopup = true;
+    return;
+  }
 
-    // 👉 Start loading animation
-    this.loading = true;
+  // Career validation popup
+  if (!this.selectedCareer && !this.searchQuery.trim()) {
+    this.showCareerPopup = true;
+    return;
+  }
 
-    // 👉 Add a small delay to SHOW the animation before navigating
-    setTimeout(() => {
-      this.loading = false;
+  const careerToSend = this.selectedCareer || this.searchQuery;
 
-      this.router.navigate(['/learning-path'], {
-        queryParams: { career: careerToSend }
-      });
-    }, 1600);  // PERFECT smooth duration
+  this.loading = true;
+
+  setTimeout(() => {
+    this.loading = false;
+
+    this.router.navigate(['/learning-path'], {
+      queryParams: { career: careerToSend }
+    });
+  }, 1600);
+}
+
+  closePopup() {
+    this.showAuthPopup = false;
   }
 }

@@ -14,6 +14,7 @@ export class LearningPathComponent implements OnInit {
   loading = false;
   error = '';
   learningPath: any = null;
+  showSavePopup = false;
   
 
   constructor(
@@ -67,28 +68,35 @@ export class LearningPathComponent implements OnInit {
     window.print(); // simple print to PDF
   }
 
-  /** SAVE OR BOOKMARK (FUTURE FEATURE) */
   onSaveToProfile() {
 
-    if (!this.learningPath) {
-      console.error("No learning path found!");
-      return;
-    }
-
-    const payload = {
-      pathName: this.learningPath.goal || 'Learning Path',
-      learningPath: this.learningPath
-    };
-
-    this.profileService.savePath(payload).subscribe({
-      next: () => {
-        alert("Learning Path saved successfully!");
-        this.router.navigate(['/saved-paths']);
-      },
-      error: (err) => {
-        console.error("Error saving path:", err);
-        alert("Failed to save learning path.");
-      }
-    });
+  if (!this.learningPath) {
+    console.error("No learning path found!");
+    return;
   }
+
+  const payload = {
+    pathName: this.learningPath.goal || 'Learning Path',
+    learningPath: this.learningPath
+  };
+
+  this.profileService.savePath(payload).subscribe({
+    next: () => {
+      this.showSavePopup = true;   // OPEN POPUP
+    },
+    error: (err) => {
+      console.error("Error saving path:", err);
+      alert("Failed to save learning path.");
+    }
+  });
+}
+
+closeSavePopup() {
+  this.showSavePopup = false;
+}
+
+goToSavedPaths() {
+  this.showSavePopup = false;
+  this.router.navigate(['/saved-paths']);
+}
 }

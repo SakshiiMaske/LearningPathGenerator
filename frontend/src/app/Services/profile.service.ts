@@ -3,10 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
-
   private BASE_URL = 'http://localhost:8080/profile';
 
   constructor(private http: HttpClient) {}
@@ -24,5 +23,11 @@ export class ProfileService {
   // Get specific saved path
   getSavedPath(pathId: string): Observable<any> {
     return this.http.get(`${this.BASE_URL}/paths/${pathId}`);
+  }
+
+  deleteSavedPath(pathId: string): Observable<any> {
+    console.log("Inside service");
+    
+    return this.http.delete(`${this.BASE_URL}/paths/${pathId}`);
   }
 }

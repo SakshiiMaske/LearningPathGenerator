@@ -13,7 +13,6 @@ export class ProgressComponent implements OnInit {
   learningPath: any;
   progressState: { [key: string]: boolean } = {};
   progressPercent: number = 0;
-
   loading: boolean = true;
 
   constructor(
@@ -30,7 +29,25 @@ export class ProgressComponent implements OnInit {
   loadSavedPath() {
     this.profileService.getSavedPath(this.pathId).subscribe({
       next: (res) => {
-        this.learningPath = res.learningPath;
+
+        console.log("FULL backend response:", res);
+
+        // Backend sends: { id, pathName, learningPath: {...} }
+        let lp = res.learningPath;
+
+        // If learningPath is string (common Mongo case), parse it
+        if (typeof lp === "string") {
+          try {
+            lp = JSON.parse(lp);
+          } catch (err) {
+            console.error("Failed to parse learningPath JSON", err);
+          }
+        }
+
+        this.learningPath = lp;
+
+        console.log("Parsed learningPath:", this.learningPath);
+
         this.initializeProgress();
         this.loadProgressFromDb();
       },
@@ -41,13 +58,26 @@ export class ProgressComponent implements OnInit {
   }
 
   initializeProgress() {
+
+    if (!this.learningPath || !Array.isArray(this.learningPath.steps)) {
+      console.warn("learningPath.steps missing or invalid");
+      this.learningPath.steps = []; // prevent UI crash
+      return;
+    }
+
     this.learningPath.steps.forEach((step: any) => {
+
+      if (!Array.isArray(step.bullets)) {
+        step.bullets = []; // prevent crash
+      }
+
       step.bullets.forEach((topic: any, index: number) => {
         const key = `${step.id}-${index}`;
         if (!(key in this.progressState)) {
           this.progressState[key] = false;
         }
       });
+
     });
 
     this.updateProgressPercent();
@@ -58,8 +88,8 @@ export class ProgressComponent implements OnInit {
       next: (res) => {
         if (res?.progressState) {
           this.progressState = res.progressState;
-          this.updateProgressPercent();
         }
+        this.updateProgressPercent();
         this.loading = false;
       },
       error: () => {
@@ -77,8 +107,13 @@ export class ProgressComponent implements OnInit {
 
   updateProgressPercent() {
     const total = Object.keys(this.progressState).length;
-    const completed = Object.values(this.progressState).filter(v => v).length;
 
+    if (total === 0) {
+      this.progressPercent = 0;
+      return;
+    }
+
+    const completed = Object.values(this.progressState).filter(v => v).length;
     this.progressPercent = Math.round((completed / total) * 100);
   }
 
