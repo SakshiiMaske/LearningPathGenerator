@@ -27,4 +27,13 @@ public class SavedLearningPathService {
     public SavedLearningPath getSavedPathById(String userId, String pathId) {
         return savedLearningPathRepository.findByIdAndUserId(pathId, userId);
     }
+
+    public void deletePath(String userId, String pathId) {
+        SavedLearningPath path = savedLearningPathRepository.findByIdAndUserId(pathId, userId);
+        if (path != null) {
+            savedLearningPathRepository.delete(path);
+        } else {
+            throw new RuntimeException("Path not found or unauthorized");
+        }
+    }
 }

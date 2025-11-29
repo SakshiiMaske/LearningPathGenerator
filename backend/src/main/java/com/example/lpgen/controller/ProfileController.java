@@ -4,6 +4,7 @@ import com.example.lpgen.model.SavedLearningPath;
 import com.example.lpgen.service.SavedLearningPathService;
 import com.example.lpgen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,5 +45,14 @@ public class ProfileController {
             @PathVariable String pathId
     ) {
         return savedLearningPathService.getSavedPathById(userId, pathId);
+    }
+
+    @DeleteMapping("/paths/{pathId}")
+    public ResponseEntity<String> deleteSavedPath(
+            @RequestHeader("userId") String userId,
+            @PathVariable String pathId
+    ) {
+        savedLearningPathService.deletePath(userId, pathId);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }
