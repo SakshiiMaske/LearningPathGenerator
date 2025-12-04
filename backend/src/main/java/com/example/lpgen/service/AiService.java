@@ -23,6 +23,9 @@ public class AiService {
     @Value("${youtube.api.key}")
     private String youtubeKey;
 
+    @Value("${serp.api.key}")
+    private String serpApiKey;
+
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -76,18 +79,18 @@ public class AiService {
         }
     }
 
-
     /*--------------------------------------------------------------------
-     * FETCH UDEMY COURSES
+     * FETCH COURSES USING SERPAPI
      *-------------------------------------------------------------------*/
-    private ArrayNode fetchUdemyCourses(String topic) {
+    private ArrayNode fetchCourses(String topic) {
         try {
-            String encoded = URLEncoder.encode(topic, StandardCharsets.UTF_8);
-            String url = "https://www.udemy.com/api-2.0/courses/?search=" + encoded;
+            String encoded = URLEncoder.encode(topic + " best online course", StandardCharsets.UTF_8);
+
+            String url = "https://serpapi.com/search.json?q=" + encoded +
+                    "&engine=google&api_key=" + serpApiKey;
 
             HttpRequest req = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("Accept", "application/json")
                     .GET()
                     .build();
 
@@ -95,28 +98,35 @@ public class AiService {
             JsonNode root = mapper.readTree(res.body());
 
             ArrayNode arr = mapper.createArrayNode();
+            JsonNode results = root.get("organic_results");
 
-            if (!root.has("results")) return arr;
+            if (results == null || !results.isArray()) return arr;
 
             int count = 0;
-            for (JsonNode c : root.get("results")) {
-                if (count >= 2) break;
+            for (JsonNode r : results) {
+                if (count >= 3) break;
 
-                ObjectNode course = mapper.createObjectNode();
-                course.put("title", c.get("title").asText());
-                course.put("url", "https://www.udemy.com" + c.get("url").asText());
+                String link = r.path("link").asText();
+                String title = r.path("title").asText();
 
-                arr.add(course);
-                count++;
+                // Allow only popular learning platforms
+                if (link.contains("udemy.com") || link.contains("coursera.org") || link.contains("edx.org")) {
+                    ObjectNode course = mapper.createObjectNode();
+                    course.put("title", title);
+                    course.put("url", link);
+                    arr.add(course);
+                    count++;
+                }
             }
 
             return arr;
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             return mapper.createArrayNode();
         }
     }
+
 
 
     /*--------------------------------------------------------------------
@@ -181,7 +191,7 @@ public class AiService {
 
             /*  ADD RESOURCES */
             ArrayNode yt = fetchYoutubeVideos(career);
-            ArrayNode courses = fetchUdemyCourses(career);
+            ArrayNode courses = fetchCourses(career);
 
             ObjectNode resources = mapper.createObjectNode();
             resources.set("youtubeVideos", yt);
