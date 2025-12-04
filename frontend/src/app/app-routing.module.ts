@@ -9,7 +9,7 @@ import { ProgressComponent } from './Components/progress/progress.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: '', component: DashboardComponent },
+  { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'learning-path', component: LearningPathComponent },

@@ -26,8 +26,11 @@ export class ProfileService {
   }
 
   deleteSavedPath(pathId: string): Observable<any> {
-    console.log("Inside service");
-    
-    return this.http.delete(`${this.BASE_URL}/paths/${pathId}`);
+    const userId = localStorage.getItem('userId') || '';
+
+    return this.http.delete(`${this.BASE_URL}/paths/${pathId}`, {
+      headers: { userId },
+      responseType: 'text',
+    });
   }
 }

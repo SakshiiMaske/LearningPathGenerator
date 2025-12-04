@@ -15,6 +15,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { SavedPathsComponent } from './Components/saved-paths/saved-paths.component';
 import { ProgressComponent } from './Components/progress/progress.component';
+import { ToastComponent } from './Components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ProgressComponent } from './Components/progress/progress.component';
     RegisterComponent,
     SavedPathsComponent,
     ProgressComponent,
+    ToastComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [

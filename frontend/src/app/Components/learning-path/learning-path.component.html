@@ -1,51 +1,90 @@
 <div class="min-h-screen bg-sky-50 flex justify-center py-12 px-4">
-  <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl p-10">
-
-    <!-- Title -->
-    <h1 class="text-3xl font-semibold text-slate-900 text-center mb-3">
-      {{ learningPath?.goal }}
-    </h1>
-
+  <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl p-10"> <!-- Title -->
+    <h1 class="text-3xl font-semibold text-slate-900 text-center mb-3"> {{ learningPath?.goal }} </h1>
     <!-- Estimated Duration -->
-    <p class="text-center text-slate-600 mb-10">
-      Estimated Duration: {{ learningPath?.estimated }}
-    </p>
-
-    <!-- Steps -->
-    <div class="space-y-6" *ngIf="learningPath?.steps">
-
-      <ng-container *ngFor="let step of learningPath.steps">
+    <p class="text-center text-slate-600 mb-10"> Estimated Duration: {{ learningPath?.estimated }} </p>
+    <!-- STEPS SECTION -->
+    <div class="space-y-6" *ngIf="hasSteps"> <ng-container *ngFor="let step of learningPath?.steps">
         <div class="rounded-2xl border border-slate-200 p-6 bg-white shadow-sm">
- 
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-slate-500 font-medium text-sm mb-1">
-                Step {{ step.id }}
-              </p>
+              <p class="text-slate-500 font-medium text-sm mb-1"> Step {{ step?.id }} </p>
+              <h3 class="text-xl font-semibold text-slate-900 leading-tight"> {{ step?.title }} </h3>
+            </div> <span *ngIf="step?.duration"
+              class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-sm font-medium border border-sky-100"> {{
+              step?.duration }} </span>
+          </div> <!-- Bullet List -->
+          <ul class="mt-4 list-disc list-inside text-slate-700 space-y-1">
+            <li *ngFor="let b of step?.bullets">{{ b }}</li>
+          </ul>
+        </div>
+      </ng-container> </div>
 
-              <h3 class="text-xl font-semibold text-slate-900 leading-tight">
-                {{ step.title }}
-              </h3>
-            </div>
+    <!-- RESOURCES -->
+    <div class="mt-14" *ngIf="hasResources">
 
-            <span *ngIf="step.duration"
-              class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-sm font-medium border border-sky-100">
-              {{ step.duration }}
-            </span>
+      <h2 class="text-2xl font-semibold text-slate-900 mb-6">
+        Additional Resources
+      </h2>
+
+      <!-- YOUTUBE RESOURCES -->
+      <div *ngIf="hasYouTube">
+
+        <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="text-red-600 text-2xl">▶</span> Top YouTube Videos
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+          <div *ngFor="let vid of learningPath?.resources?.youtubeVideos"
+            class="p-5 bg-white rounded-2xl shadow hover:shadow-md transition border border-slate-200">
+
+            <!-- <img [src]="vid.thumbnail" class="w-full h-40 object-cover rounded-xl mb-3 shadow-sm"> -->
+
+            <h4 class="font-semibold text-slate-900 mb-2 line-clamp-2">
+              {{ vid.title }}
+            </h4>
+
+            <a [href]="vid.url" target="_blank" class="text-sky-600 font-medium hover:underline">
+              Watch Video →
+            </a>
+
           </div>
 
-          <!-- Bullet List -->
-          <ul class="mt-4 list-disc list-inside text-slate-700 space-y-1">
-            <li *ngFor="let b of step.bullets">{{ b }}</li>
-          </ul>
+        </div>
+
+      </div>
+
+      <!-- COURSES -->
+      <div class="mt-10" *ngIf="hasCourses">
+
+        <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          🎓 Recommended Courses
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+          <div *ngFor="let course of learningPath?.resources?.courses"
+            class="p-5 bg-white rounded-2xl shadow hover:shadow-md transition border border-slate-200">
+
+            <h4 class="font-semibold text-slate-900 mb-2 line-clamp-2">
+              {{ course.title }}
+            </h4>
+
+            <a [href]="course.url" target="_blank" class="text-sky-600 font-medium hover:underline">
+              View Course →
+            </a>
+
+          </div>
 
         </div>
-      </ng-container>
+
+      </div>
 
     </div>
 
-    <!-- Buttons -->
-    <div class="mt-10 flex flex-wrap justify-between items-center gap-4">
+    <!-- BUTTONS -->
+    <div class="mt-12 flex flex-wrap justify-between items-center gap-4">
 
       <div class="flex gap-3">
 
@@ -54,15 +93,13 @@
           Download PDF
         </button>
 
-        <button (click)="onSaveToProfile()" 
-          class="px-5 py-2.5 rounded-xl bg-sky-100 hover:bg-sky-200 
-           text-sky-800 font-medium border border-sky-200">
+        <button (click)="onSaveToProfile()"
+          class="px-5 py-2.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-800 font-medium border border-sky-200">
           Save to Profile
         </button>
 
-        <button (click)="onRegenerate()" 
-          class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 
-           text-slate-700 font-medium border border-slate-200">
+        <button (click)="onRegenerate()"
+          class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium border border-slate-200">
           Regenerate
         </button>
 
@@ -77,10 +114,9 @@
 </div>
 
 
-<div 
-  *ngIf="showSavePopup"
-  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50"
->
+<!-- SAVE POPUP -->
+<div *ngIf="showSavePopup"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50">
   <div class="bg-white w-[28rem] p-8 rounded-3xl shadow-2xl animate-[fadeIn_.25s_ease-out]">
 
     <h2 class="text-2xl font-semibold text-gray-900 mb-4 text-center">
@@ -92,17 +128,13 @@
     </p>
 
     <div class="flex gap-4">
-      <button
-        (click)="goToSavedPaths()"
-        class="flex-1 py-3 rounded-xl bg-sky-600 text-white text-base font-semibold 
-               hover:bg-sky-700 transition shadow-sm">
+      <button (click)="goToSavedPaths()"
+        class="flex-1 py-3 rounded-xl bg-sky-600 text-white text-base font-semibold hover:bg-sky-700 transition shadow-sm">
         View Saved Paths
       </button>
 
-      <button
-        (click)="closeSavePopup()"
-        class="flex-1 py-3 rounded-xl bg-gray-200 text-gray-800 text-base font-medium 
-               hover:bg-gray-300 transition shadow-sm">
+      <button (click)="closeSavePopup()"
+        class="flex-1 py-3 rounded-xl bg-gray-200 text-gray-800 text-base font-medium hover:bg-gray-300 transition shadow-sm">
         Close
       </button>
     </div>
