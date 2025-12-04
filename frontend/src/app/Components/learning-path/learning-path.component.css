@@ -1,0 +1,18 @@
+/* empty — Tailwind utilities are used in the HTML.
+   If you need custom styles for print, you can add them here. */
+
+/* Example print styles (optional) */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .min-h-screen, .min-h-screen * {
+    visibility: visible;
+  }
+  .min-h-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

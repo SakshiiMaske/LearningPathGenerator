@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/learning_path_db
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: "replace_this_with_a_strong_secret_change_in_prod_!@#123"
+    expiration-ms: 86400000 # 1 day in ms

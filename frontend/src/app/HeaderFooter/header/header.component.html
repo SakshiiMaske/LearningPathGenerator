@@ -1,0 +1,32 @@
+<header class="w-full bg-white shadow-sm h-16 flex items-center px-8 justify-between">
+  <!-- Left: Logo + Title -->
+  <div class="flex items-center gap-3">
+    <!-- Logo -->
+    <div class="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center">
+      <span class="text-white font-bold text-lg">L</span>
+    </div>
+
+    <!-- App Title -->
+    <h1 class="text-lg font-semibold text-gray-900">
+      Learning Path Generator
+    </h1>
+  </div>
+
+  <!-- Right: Navigation Links -->
+  <nav class="flex items-center gap-8 text-gray-700">
+    <a routerLink="/dashboard" class="hover:text-sky-600 transition">Home</a>
+    <a *ngIf="authService.isLoggedIn()" routerLink="/saved-paths" class="hover:text-sky-600 transition">Saved Paths</a>
+    <!-- User NOT Logged In -->
+    <ng-container *ngIf="!authService.isLoggedIn(); else loggedIn">
+      <a routerLink="/login" class="hover:text-sky-600 transition">Login</a>
+      <a routerLink="/register" class="hover:text-sky-600 transition">Register</a>
+    </ng-container>
+
+    <!-- User IS Logged In -->
+    <ng-template #loggedIn>
+      <button (click)="logout()" class="hover:text-red-500 transition font-small">
+        Logout
+      </button>
+    </ng-template>
+  </nav>
+</header>

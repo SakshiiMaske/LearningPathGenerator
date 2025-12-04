@@ -1,0 +1,86 @@
+<div class="w-11/12 mx-auto py-14">
+
+  <h2 class="text-2xl font-semibold mb-6">Your Saved Learning Paths</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center text-lg py-6 animate-pulse">
+    Loading...
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && savedPaths.length === 0" class="text-center text-gray-500 text-lg py-6">
+    You have no saved learning paths yet.
+  </div>
+
+  <!-- Saved Paths Grid -->
+  <div *ngIf="savedPaths.length > 0"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div *ngFor="let path of savedPaths"
+         class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+
+      <h3 class="text-xl font-bold mb-1">{{ path.pathName }}</h3>
+
+      <p class="text-sm text-gray-500 mb-6">
+        Saved on: {{ path.savedAt | date:'medium' }}
+      </p>
+
+      <div class="flex gap-3">
+        
+        <!-- View Progress -->
+        <button (click)="openProgress(path.id)"
+                class="flex-1 bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-lg 
+                       font-medium transition">
+          View Progress
+        </button>
+
+        <!-- Delete Button -->
+        <button (click)="openDeleteModal(path)"
+                class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg 
+                       font-medium transition">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div *ngIf="showDeleteModal"
+     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50">
+
+  <div class="bg-white w-[28rem] p-8 rounded-3xl shadow-2xl animate-[fadeIn_.25s_ease-out]">
+
+    <h3 class="text-2xl font-semibold text-gray-900 mb-4">
+      Delete Learning Path?
+    </h3>
+
+    <p class="text-gray-600 text-base leading-relaxed mb-8">
+      Are you sure you want to delete
+      <span class="font-semibold text-gray-800">{{ selectedPath?.pathName }}</span>?
+      This action cannot be undone.
+    </p>
+
+    <div class="flex gap-4">
+
+      <!-- Cancel -->
+      <button (click)="closeDeleteModal()"
+              class="flex-1 py-3 rounded-xl border border-gray-300 text-gray-800 
+                     hover:bg-gray-100 text-base transition font-medium">
+        Cancel
+      </button>
+
+      <!-- Delete -->
+      <button (click)="confirmDelete()"
+              class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl 
+                     font-semibold transition shadow-sm">
+        Delete
+      </button>
+
+    </div>
+
+  </div>
+</div>

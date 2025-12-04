@@ -1,0 +1,60 @@
+<div class="flex-1 flex items-center justify-center bg-sky-50 py-12">
+
+  <div class="w-full max-w-sm bg-white shadow-lg rounded-2xl p-8">
+
+    <h2 class="text-2xl font-semibold text-slate-800 text-center mb-6">
+      Register
+    </h2>
+
+    <!-- Full Name -->
+    <input
+      type="text"
+      placeholder="Full Name"
+      [(ngModel)]="name"
+      class="w-full mb-3 px-4 py-2.5 border border-slate-300 rounded-xl
+             focus:border-sky-500 focus:ring focus:ring-sky-200 outline-none"
+    />
+
+    <!-- Email -->
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      class="w-full mb-3 px-4 py-2.5 border border-slate-300 rounded-xl
+             focus:border-sky-500 focus:ring focus:ring-sky-200 outline-none"
+    />
+
+    <!-- Password -->
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-xl
+             focus:border-sky-500 focus:ring focus:ring-sky-200 outline-none"
+    />
+
+    <!-- Register Button -->
+    <button
+      (click)="register()"
+      class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl 
+             font-medium transition shadow-sm"
+    >
+      Register
+    </button>
+
+    <!-- Error message -->
+    <p *ngIf="errorMessage" class="text-red-500 text-sm mt-3 text-center">
+      {{ errorMessage }}
+    </p>
+
+    <!-- Login Link -->
+    <a
+      routerLink="/login"
+      class="block text-center text-sky-700 mt-4 hover:underline"
+    >
+      Already have an account? Login
+    </a>
+
+  </div>
+
+</div>
