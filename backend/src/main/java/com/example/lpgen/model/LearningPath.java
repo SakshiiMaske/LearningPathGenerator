@@ -8,12 +8,15 @@ public class LearningPath {
     private String estimated;
     private List<Step> steps;
 
+    private Resources resources;
+
     public LearningPath() {}
 
-    public LearningPath(String goal, String estimated, List<Step> steps) {
+    public LearningPath(String goal, String estimated, List<Step> steps, Resources resources) {
         this.goal = goal;
         this.estimated = estimated;
         this.steps = steps;
+        this.resources = resources;
     }
 
     public String getGoal() {
@@ -38,5 +41,13 @@ public class LearningPath {
 
     public void setSteps(List<Step> steps) {
         this.steps = steps;
+    }
+
+    public Resources getResources() {
+        return resources;
+    }
+
+    public void setResources(Resources resources) {
+        this.resources = resources;
     }
 }
