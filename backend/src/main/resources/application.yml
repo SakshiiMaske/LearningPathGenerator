@@ -3,8 +3,8 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/learning_path_db
 
-server:
-  port: 8080
+#server:
+#  port: 8080
 
 app:
   jwt:
